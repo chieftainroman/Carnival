@@ -1,0 +1,73 @@
+
+{% load static %}
+  <!-- footer section starts  -->
+
+    <section class="footer">
+        <div class="box-container">
+          <div class="box">
+            <h3>О нас</h3>
+            <p>
+              Продажа кофе различных сортов оптом по всей России
+            </p>
+          </div>
+        </div>
+  
+        <div class="share">
+          
+          <a href="https://www.ozon.ru/seller/carnival-159028/products/?miniapp=seller_159028" id="ozon" class="fa-light fa-o"></a>
+          <a href="https://www.wildberries.ru/seller/205582" id="wildberries" class="fa-light fa-w"></a>
+
+        </div>
+  
+
+      </section>
+  
+      <!-- footer section ends -->
+      <script src="https://kit.fontawesome.com/e6a0833277.js" crossorigin="anonymous"></script>
+      <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+  <!-- JavaScript files-->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/lightbox2/js/lightbox.min.js' %}"></script>
+  <script src="{% static 'vendor/nouislider/nouislider.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap-select/js/bootstrap-select.min.js' %}"></script>
+  <script src="{% static 'vendor/owl.carousel2/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.min.js' %}"></script>
+  <script src="{% static 'js/front.js' %}"></script>
+
+
+  
+  <script>
+    // ------------------------------------------------------- //
+    //   Inject SVG Sprite - 
+    //   see more here 
+    //   https://css-tricks.com/ajaxing-svg-sprite/
+    // ------------------------------------------------------ //
+    function injectSvgSprite(path) {
+    
+        var ajax = new XMLHttpRequest();
+        ajax.open("GET", path, true);
+        ajax.send();
+        ajax.onload = function(e) {
+        var div = document.createElement("div");
+        div.className = 'd-none';
+        div.innerHTML = ajax.responseText;
+        document.body.insertBefore(div, document.body.childNodes[0]);
+        }
+    }
+    // this is set to BootstrapTemple website as you cannot 
+    // inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
+    // while using file:// protocol
+    // pls don't forget to change to your domain :)
+    injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg'); 
+    
+  </script>
+  <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+      <!-- custom js file link -->
+      <script src="{% static 'js/script.js'%}"></script>
+      <script src="{% static 'js/front.js'%}"></script>
+
+    </body>
+  </html>
+  

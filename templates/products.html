@@ -1,0 +1,50 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% load product_tags %}
+{% block content %}
+
+    <!-- products section starts  -->
+
+    <section class="products" id="products">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="filter-buttons">
+          {% for c in categories %}
+          <div class="buttons active" data-filter="{{ c.title }}">
+            <a href = "{% url 'category-products' c.slug %}">{{ c.title }}</a>
+          </div>           
+          {% endfor %}
+        </div>
+        <div class="box-container">
+          
+          {% for pr in products %}
+          <div class="box" data-item="{{ pr.category }}">
+            <div class="icons">
+              <a href="#" class="fas fa-shopping-cart"></a>
+              <a href="#" class="fas fa-heart"></a>
+              <a href="{% url 'product-detail' pr.slug %}" class="fas fa-eye"></a>
+            </div>
+            <div class="image">
+              {% if pr.product_image %}
+              <img src="{{ pr.product_image.url }}" alt="" />
+              {% endif %}
+            </div>
+            <div class="content">
+              <h3>{{ pr.product_name|truncatewords:5}}</h3>
+              <div class="price">
+                <div class="amount">{% call_sellprice pr.product_price pr.discount_percent %}₽</div>
+                <div class="cut">{{ pr.product_price }}₽</div>
+                <div class="offer">Скидка {{ pr.discount_percent }}%</div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          </div>
+        </div>
+      </section>
+  
+
+{% endblock %}

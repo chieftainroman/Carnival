@@ -1,0 +1,119 @@
+{% extends "partials/base.html" %} {% load static %}
+{% load product_tags %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Product Card/Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{% static 'style.css'%}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+  </head>
+  {% block content %}
+  <body>
+    <div class="card-wrapper">
+      <div class="card">
+        <!-- card left -->
+        <div class="product-imgs">
+          <div class="img-display">
+            <div class="img-showcase">
+              
+              {% if photos %}
+              {% for p in photos %}
+              <img src="{{ p.images.url }}" alt="shoe image" />
+              {% endfor %}
+              {% else %}
+              <img src="{{ product.product_image.url }}" alt="shoe image" />
+              {% endif %}
+            </div>
+          </div>
+          <div class="img-select">
+          {% for p in photos %}
+            <div class="img-item">
+              <a href="#" data-id="{{ p.place }}">
+                <img src="{{ p.images.url }}" alt="shoe image" />
+              </a>
+            </div>
+            {% endfor %}
+
+          </div>
+        </div>
+        <!-- card right -->
+        <div class="product-content">
+          <h1 class="product-title">{{ product.product_name }}</h1>
+
+          <div class="product-price">
+            <p class="last-price">Старая цена: <span>{{ product.product_price }}₽</span></p>
+            <p class="new-price">Новая цена: <span>{% call_sellprice product.product_price product.discount_percent %}₽ Скидка ({{ product.discount_percent }})%</span></p>
+          </div>
+
+          <div class="product-detail">
+            <h1>Об этом товаре:</h1>
+            <p>
+              {{ product.product_description|safe }}
+            </p>
+            <ul>
+              {%if product.type_of_product%}
+              <li>Тип: <span>{{ product.type_of_product }}</span></li>
+              {% endif %}
+              {%if product.available%}
+              <li><span>{{ product.available }}</span></li>
+              {% endif %}
+              {%if product.sort_of_tea%}
+              <li>Сорт чая: <span>{{ product.sort_of_tea }}</span></li>
+              {% endif %}
+              {%if product.kind_of_tea%}
+              <li>Вид чая: <span>{{ product.kind_of_tea }}</span></li>
+              {% endif %}
+              {%if product.number_of_suchets%}
+              <li>Число пакетиков: <span>{{ product.number_of_suchets }}</span></li>
+              {% endif %}
+              {%if product.tea_shapes%}
+              <li>Форма чая: <span>{{ product.tea_shapes }}</span></li>
+              {% endif %}
+              {%if product.tea_leaf_size%}
+              <li>Размер листа: <span>{{ product.tea_leaf_size }}</span></li>
+              {% endif %}
+              {%if product.weight_of_product%}
+              <li>Вес продукта: <span>{{ product.weight_of_product }} гр</span></li>
+              {% endif %}
+              {%if product.composition_of_coffee%}
+              <li>Состав кофе: <span>{{ product.composition_of_coffee }}</span></li>
+              {% endif %}
+              {%if product.coffe_roasting%}
+              <li>Степень обжарки зерен: <span>{{ product.coffe_roasting }}</span></li>
+              {% endif %}
+              {%if product.taste_intensity%}
+              <li>Интенсивность вкуса: <span>{{ product.taste_intensity }}</span></li>
+              {% endif %}
+              {%if product.arabica_content%}
+              <li>Содержание арабики в %: <span>{{ product.arabica_content }}</span></li>
+              {% endif %}
+              {%if product.producting_technology%}
+              <li>Технология производства: <span>{{ product.producting_technology }}</span></li>
+              {% endif %}
+            </ul>
+          </div>
+
+          <div class="purchase-info">
+            <input type="number" min="0" value="1" />
+            <button type="button" class="btn">
+              Добавить в корзину <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button type="button" class="btn">Compare</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'script.js'%}"></script>
+  </body>
+</html>
+{% endblock %}
