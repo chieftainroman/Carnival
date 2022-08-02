@@ -61,16 +61,7 @@
     <section class="products" id="products">
       <h1 class="heading">Эксклюзивные <span>продукты</span></h1>
 
-      <div class="filter-buttons">
-        <div class="buttons active" data-filter="all">
-          Все
-        </div>  
-        {% for c in categories %}
-        <div class="buttons active" data-filter="{{ c.title }}">
-          {{ c.title }}
-        </div>           
-        {% endfor %}
-      </div>
+
 
       <div class="box-container">
 
@@ -108,10 +99,18 @@
       </div>
 
       <div class="content">
+        {% if sf.sale_red_title %}
         <span>{{ sf.sale_red_title }}</span>
+        {% endif %}
+        {% if sf.sale_title %}
         <h3>{{ sf.sale_title }}</h3>
+        {% endif %}
+        {% if sf.sale_title %}
         <p>{{ sf.sale_title }}</p>
+        {% endif %}
+        {% if sf.sale_slug %}
         <a href="{{ sf.sale_slug }}" class="btn">Посмотреть</a>
+        {% endif %}
       </div>
     </section>
 {% endfor %}

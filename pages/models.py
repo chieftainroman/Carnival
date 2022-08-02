@@ -3,22 +3,60 @@ from django.db import models
 from django.db.models.fields import FloatField
 from django.forms import IntegerField
 from tinymce import models as tinymce_models
-from django.template.defaultfilters import slugify
+#from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.dispatch import receiver
 from django.db.models import signals
-class Type(models.Model):
-    title = models.CharField(max_length=50, verbose_name="Category Title")
-
-    def __str__(self):
-        return self.title
+from django.db.models.signals import pre_save
+from django.utils.text import slugify
+import string  # for string constants
+import random  # for generating random strings
 class Category(models.Model):
     title = models.CharField(max_length=50, verbose_name="Название категории")
-    slug = models.SlugField(max_length=55,null=True,blank=True,  verbose_name="(Это поле создасться автоматически.Ее заполнять не нужно!)")
-
+    slug = models.SlugField(
+        max_length=160, verbose_name="(Это поле создасться автоматически.Ее заполнять не нужно!)", null=True,unique=True,blank = True)
+    first_in_the_topic = models.BooleanField(null=True,blank= True)
     def __str__(self):
         return self.title
+    
+    def save(self, *args, **kwargs):
+        title = self.title
+        # allow_unicode=True for support utf-8 languages
+        self.slug = self.generate_slug()
+        super(Category, self).save(*args, **kwargs)
+        
+    def generate_slug(self, save_to_obj=False, add_random_suffix=True):
+        """
+        Generates and returns slug for this obj.
+        If `save_to_obj` is True, then saves to current obj.
+        Warning: setting `save_to_obj` to True
+              when called from `.save()` method
+              can lead to recursion error!
 
+        `add_random_suffix ` is to make sure that slug field has unique value.
+        """
+
+        # We rely on django's slugify function here. But if
+        # it is not sufficient for you needs, you can implement
+        # you own way of generating slugs.
+        generated_slug = slugify(self.title)
+
+        # Generate random suffix here.
+        random_suffix = ""
+        if add_random_suffix:
+            random_suffix = ''.join([
+                random.choice(string.ascii_letters + string.digits)
+                for i in range(5)
+            ])
+            generated_slug += '-%s' % random_suffix
+
+        if save_to_obj:
+            self.slug = generated_slug
+            self.save(update_fields=['slug'])
+        
+        return generated_slug
+
+    
 
 PRODUCT_TYPE_CHOICES = (
     ('Чай в пакетиках','Чай в пакетиках'),
@@ -115,9 +153,35 @@ class Products(models.Model):
     def __str__(self):
         return self.product_name
     
-@receiver(signals.pre_save, sender=Products)
-def populate_slug(sender, instance, **kwargs):
-    instance.slug = slugify(instance.product_name)
+    def save(self, *args, **kwargs):
+        product_name = self.product_name
+        # allow_unicode=True for support utf-8 languages
+        self.slug = self.generate_slug()
+        super(Products, self).save(*args, **kwargs)
+        
+    def generate_slug(self, save_to_obj=False, add_random_suffix=True):
+
+        # We rely on django's slugify function here. But if
+        # it is not sufficient for you needs, you can implement
+        # you own way of generating slugs.
+        generated_slug = slugify(self.product_name)
+
+        # Generate random suffix here.
+        random_suffix = ""
+        if add_random_suffix:
+            random_suffix = ''.join([
+                random.choice(string.ascii_letters + string.digits)
+                for i in range(5)
+            ])
+            generated_slug += '-%s' % random_suffix
+
+        if save_to_obj:
+            self.slug = generated_slug
+            self.save(update_fields=['slug'])
+        
+        return generated_slug
+    
+
 
 
 

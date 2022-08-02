@@ -1,10 +1,9 @@
 from django.contrib import admin
-from . models import Products, Slider, Offers, SaleOffers, ProductsImage, Category , Type, TeaDetail
+from . models import Products, Slider, Offers, SaleOffers, ProductsImage, Category , TeaDetail
 
 admin.site.register(Slider)
 admin.site.register(Offers)
 admin.site.register(SaleOffers)
-admin.site.register(Type)
 admin.site.register(Category)
 
 

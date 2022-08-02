@@ -12,10 +12,17 @@
         <br>
         <br>
         <div class="filter-buttons">
+          {% for a in first_topic_categories%}
+          <div class="buttons active" data-filter="{{ a.title }}">
+            <a class="buttons active" href = "{% url 'category-products' a.slug %}" style="color: #512A10">{{ a.title }}</a>
+          </div>  
+          {% endfor %}
           {% for c in categories %}
+          {% if not c.first_in_the_topic %}
           <div class="buttons active" data-filter="{{ c.title }}">
-            <a href = "{% url 'category-products' c.slug %}">{{ c.title }}</a>
-          </div>           
+            <a class="buttons active" href = "{% url 'category-products' c.slug %}" style="color: #512A10">{{ c.title }}</a>
+          </div> 
+          {% endif %}          
           {% endfor %}
         </div>
         <div class="box-container">
