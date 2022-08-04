@@ -120,7 +120,7 @@ class Products(models.Model):
     slug = models.SlugField(
         max_length=160, verbose_name="Ссылка продукта", null=True,unique=True,blank = True)
     is_featured = models.BooleanField(verbose_name="Это один из лучших товаров?",default=False)
-    is_exclusive= models.BooleanField(verbose_name="Это один из эксклюзивных товаров?",default=False)
+    is_exclusive= models.BooleanField(verbose_name="Это товар по акции?",default=False)
 
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Created Date", null=True)
