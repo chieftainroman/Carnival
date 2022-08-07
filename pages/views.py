@@ -102,3 +102,21 @@ def payment_success(request):
 #При ошибке в оплате
 def payment_error(request):
     return render(request, 'error_payment.html')
+
+def balance(request):
+    merchant_id = '20856'
+    secret_word = ',?>GmGGS(?&UEBx'
+    order_id = '154'
+    order_amount = '10.11'
+    currency = 'RUB'
+    sign = hashlib.md5(f'{merchant_id}:{order_amount}:{secret_word}:{currency}:{order_id}'.encode('utf-8')).hexdigest()
+ 
+    context = {
+        'm': merchant_id,
+        'oa': order_amount,
+        'o': order_id,
+        's': sign,
+        'currency': currency
+    }
+ 
+    return render(request, 'balance.html', context)
