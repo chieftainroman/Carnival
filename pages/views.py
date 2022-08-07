@@ -9,7 +9,7 @@ from django.conf import settings
 from django import template
 from django.db.models import Q  
 register = template.Library()
-
+import hashlib
 def index(request):
     slider = Slider.objects.all()
     offers = Offers.objects.all()
