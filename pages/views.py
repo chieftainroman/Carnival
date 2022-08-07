@@ -88,6 +88,7 @@ def category_products(request, slug):
 
     }
     return render(request, 'category_products.html', context)
+
 def payment_alerts(request):
     return render(request, 'payment_alerts.html')
 
@@ -95,9 +96,9 @@ def payment_alerts(request):
  
 #При успешной оплате
 def payment_success(request):
-    return render(request, 'main/payment/success.html')
+    return render(request, 'success_payment.html')
  
  
 #При ошибке в оплате
 def payment_error(request):
-    return render(request, 'success_payment.html')
+    return render(request, 'error_payment.html')
