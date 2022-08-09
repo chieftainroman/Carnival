@@ -37,6 +37,7 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('composition_of_coffee','coffe_roasting','taste_intensity','arabica_content','producting_technology',),
         }),
     )
+    search_fields = ('product_name','product_description')
 
 @admin.register(ProductsImage)
 class PostImageAdmin(admin.ModelAdmin):
