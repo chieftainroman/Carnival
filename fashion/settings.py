@@ -78,8 +78,8 @@ WSGI_APPLICATION = 'fashion.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'carnival', 
-        'USER': 'roman', 
+        'NAME': 'fashion-website-database', 
+        'USER': 'postgres', 
         'PASSWORD': '10520126Roman',
         'HOST': 'localhost', 
         'PORT': '',
@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -118,23 +118,19 @@ USE_I18N = True
 
 USE_TZ = True
 
-CONTACT_EMAIL = 'contact@example.com'
-ADMIN_EMAILS = ['romanmammadov872@gmail.com', ]
+EMAIL_BACKEND = 'django_ses.SESBackend'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
-EMAIL_HOST_PASSWORD = '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'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_HOST = 'email-smtp.eu-west-1.amazonaws.com' 
+EMAIL_USE_TLS = True  
+EMAIL_HOST_USER = 'AKIATZ3374A52FSFRZ6F'  
+EMAIL_HOST_PASSWORD = 'BPdkHo1vx2iqrkO7Rem6f867YBxwYMBSVNyzbyrfpR7E'  
+EMAIL_PORT = 587  
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-#STATICFILES_DIRS = [os.path.join(BASE_DIR,"static")]
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR,"static")]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
