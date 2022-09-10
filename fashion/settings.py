@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-*qc5hb4mye-!2uhnruisq3b)oocnv_(q!a22tfsw=7%ys1+#w*
 DEBUG = True
 
 ALLOWED_HOSTS = ["3.70.1.42","www.carnival-shop.ru","carnival-shop.ru","www.carnival-shop.info","carnival-shop.info"]
-
+CSRF_TRUSTED_ORIGINS = ['https://www.carnival-shop.ru','https://*.127.0.0.1','https://www.carnival-shop.info']
 
 # Application definition
 
