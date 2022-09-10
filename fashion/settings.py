@@ -79,7 +79,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'carnival', 
-        'USER': 'postgres', 
+        'USER': 'roman', 
         'PASSWORD': '10520126Roman',
         'HOST': 'localhost', 
         'PORT': '',
