@@ -1,11 +1,17 @@
 from django.contrib import admin
-from . models import Products, Slider, Offers, SaleOffers, ProductsImage, Category , TeaDetail
+from . models import Products, Slider, Offers, SaleOffers, ProductsImage, Category , TeaDetail, Cart
 
 admin.site.register(Slider)
 admin.site.register(Offers)
 admin.site.register(SaleOffers)
 admin.site.register(Category)
 
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'quantity', 'created_at')
+    list_editable = ('quantity',)
+    list_filter = ('created_at',)
+    list_per_page = 20
+    search_fields = ('user', 'product')
 
 
 class PostImageAdmin(admin.StackedInline):
@@ -37,10 +43,10 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('composition_of_coffee','coffe_roasting','taste_intensity','arabica_content','producting_technology',),
         }),
     )
-    search_fields = ('product_name','product_description')
 
 @admin.register(ProductsImage)
 class PostImageAdmin(admin.ModelAdmin):
     pass
 
+admin.site.register(Cart, CartAdmin)
 
