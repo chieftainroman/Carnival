@@ -11,6 +11,8 @@ from django.db.models.signals import pre_save
 from django.utils.text import slugify
 import string  # for string constants
 import random  # for generating random strings
+from django.contrib.auth.models import User
+
 class Category(models.Model):
     title = models.CharField(max_length=50, verbose_name="Название категории")
     slug = models.SlugField(
@@ -120,7 +122,7 @@ class Products(models.Model):
     slug = models.SlugField(
         max_length=160, verbose_name="Ссылка продукта", null=True,unique=True,blank = True)
     is_featured = models.BooleanField(verbose_name="Это один из лучших товаров?",default=False)
-    is_exclusive= models.BooleanField(verbose_name="Это товар по акции?",default=False)
+    is_exclusive= models.BooleanField(verbose_name="Это один из эксклюзивных товаров?",default=False)
 
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Created Date", null=True)
@@ -182,7 +184,20 @@ class Products(models.Model):
         return generated_slug
     
 
+class Cart(models.Model):
+    user = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
+    product = models.ForeignKey(Products, verbose_name="Product", on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1, verbose_name="Quantity")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created Date")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated Date")
 
+    def __str__(self):
+        return str(self.user)
+    
+    # Creating Model Property to calculate Quantity x Price
+    @property
+    def total_price(self):
+        return self.quantity * self.product.price
 
 
 
