@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'fashion.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'fashion-website-database', 
+        'NAME': 'carnival', 
         'USER': 'postgres', 
         'PASSWORD': '10520126Roman',
         'HOST': 'localhost', 
