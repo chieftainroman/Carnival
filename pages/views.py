@@ -169,7 +169,7 @@ def add_to_cart(request):
     
     return redirect('cart')
 
-@login_required
+@login_required(login_url="login/")
 def cart(request):
 
     user = request.user
