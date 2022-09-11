@@ -169,11 +169,11 @@ def add_to_cart(request):
 
 
 def cart(request):
-    if not user.is_authenticated():
-        return redirect("login")
+
     user = request.user
     cart_products = Cart.objects.filter(user=user)
-
+    if not user.is_authenticated():
+        return redirect("login")
     # Display Total on Cart Page
     amount = decimal.Decimal(0)
     shipping_amount = decimal.Decimal(10)
