@@ -169,6 +169,8 @@ def add_to_cart(request):
 
 
 def cart(request):
+    if not user.is_authenticated():
+        return redirect("login")
     user = request.user
     cart_products = Cart.objects.filter(user=user)
 
