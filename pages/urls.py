@@ -19,7 +19,7 @@ urlpatterns = [
     path('plus-cart/<int:cart_id>/', views.plus_cart, name="plus-cart"),
     path('minus-cart/<int:cart_id>/', views.minus_cart, name="minus-cart"),
     path('signup',views.signup,name = "signup"),
-    path('login',views.Login,name = "login"),
+    path('accounts/login',views.Login,name = "login"),
     path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',  views.activate, name='activate'),
     
     #path("reset_password/", auth_views.PasswordResetView.as_view(),name="reset_password"),
