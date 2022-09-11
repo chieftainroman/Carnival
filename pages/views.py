@@ -24,6 +24,7 @@ from .tokens import account_activation_token
 from django.contrib.auth.models import User  
 from django.core.mail import EmailMessage  
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     slider = Slider.objects.all()
@@ -151,6 +152,7 @@ def detail(request, slug):
     }
     return render(request, 'detail.html', context)
 
+
 def add_to_cart(request):
     user = request.user
     product_id = request.GET.get('prod_id')
@@ -167,13 +169,11 @@ def add_to_cart(request):
     
     return redirect('cart')
 
-
+@login_required
 def cart(request):
 
     user = request.user
     cart_products = Cart.objects.filter(user=user)
-    if not request.user.is_authenticated:
-        return redirect("login")
     # Display Total on Cart Page
     amount = decimal.Decimal(0)
     shipping_amount = decimal.Decimal(10)
