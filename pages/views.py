@@ -152,7 +152,7 @@ def detail(request, slug):
     }
     return render(request, 'detail.html', context)
 
-
+@login_required(login_url="https://www.carnival-shop.info/login/")
 def add_to_cart(request):
     user = request.user
     product_id = request.GET.get('prod_id')
@@ -192,7 +192,7 @@ def cart(request):
     }
     return render(request, 'cart/index.html', context)
 
-
+@login_required(login_url="https://www.carnival-shop.info/login/")
 def remove_cart(request, cart_id):
     if request.method == 'GET':
         c = get_object_or_404(Cart, id=cart_id)
@@ -201,7 +201,7 @@ def remove_cart(request, cart_id):
     return redirect('cart')
 
 
-
+@login_required(login_url="https://www.carnival-shop.info/login/")
 def plus_cart(request, cart_id):
     if request.method == 'GET':
         cp = get_object_or_404(Cart, id=cart_id)
@@ -209,7 +209,7 @@ def plus_cart(request, cart_id):
         cp.save()
     return redirect('cart')
 
-
+@login_required(login_url="https://www.carnival-shop.info/login/")
 def minus_cart(request, cart_id):
     if request.method == 'GET':
         cp = get_object_or_404(Cart, id=cart_id)
