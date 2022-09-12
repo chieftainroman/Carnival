@@ -12,7 +12,6 @@ from django.utils.text import slugify
 import string  # for string constants
 import random  # for generating random strings
 from django.contrib.auth.models import User
-
 class Category(models.Model):
     title = models.CharField(max_length=50, verbose_name="Название категории")
     slug = models.SlugField(
@@ -23,27 +22,11 @@ class Category(models.Model):
     
     def save(self, *args, **kwargs):
         title = self.title
-        # allow_unicode=True for support utf-8 languages
         self.slug = self.generate_slug()
         super(Category, self).save(*args, **kwargs)
         
     def generate_slug(self, save_to_obj=False, add_random_suffix=True):
-        """
-        Generates and returns slug for this obj.
-        If `save_to_obj` is True, then saves to current obj.
-        Warning: setting `save_to_obj` to True
-              when called from `.save()` method
-              can lead to recursion error!
-
-        `add_random_suffix ` is to make sure that slug field has unique value.
-        """
-
-        # We rely on django's slugify function here. But if
-        # it is not sufficient for you needs, you can implement
-        # you own way of generating slugs.
         generated_slug = slugify(self.title)
-
-        # Generate random suffix here.
         random_suffix = ""
         if add_random_suffix:
             random_suffix = ''.join([
@@ -162,13 +145,7 @@ class Products(models.Model):
         super(Products, self).save(*args, **kwargs)
         
     def generate_slug(self, save_to_obj=False, add_random_suffix=True):
-
-        # We rely on django's slugify function here. But if
-        # it is not sufficient for you needs, you can implement
-        # you own way of generating slugs.
         generated_slug = slugify(self.product_name)
-
-        # Generate random suffix here.
         random_suffix = ""
         if add_random_suffix:
             random_suffix = ''.join([
@@ -181,9 +158,7 @@ class Products(models.Model):
             self.slug = generated_slug
             self.save(update_fields=['slug'])
         
-        return generated_slug
-    
-
+        return generated_slug  
 class Cart(models.Model):
     user = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
     product = models.ForeignKey(Products, verbose_name="Product", on_delete=models.CASCADE)
@@ -198,17 +173,12 @@ class Cart(models.Model):
     @property
     def total_price(self):
         return self.quantity * self.product.price
-
-
-
 class TeaDetail(models.Model):
     post = models.ForeignKey(Products, default=None, on_delete=models.CASCADE)
     kind_of_tea = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return self.post.product_name
-
-
 class ProductsImage(models.Model):
     post = models.ForeignKey(Products, default=None, on_delete=models.CASCADE)
     images = models.FileField(upload_to='product_images/',verbose_name='Дополнительные снимки продукта')
@@ -216,8 +186,6 @@ class ProductsImage(models.Model):
 
     def __str__(self):
         return self.post.product_name
-
-
 class Slider(models.Model):
     slider_name = models.CharField(max_length=255)
     slider_sale = models.CharField(max_length=255, null=True, blank=True)
@@ -228,8 +196,6 @@ class Slider(models.Model):
 
     def __str__(self):
         return self.slider_name
-
-
 class Offers(models.Model):
     offer_name = models.CharField(max_length=255, default="Object")
     offer_title = models.CharField(max_length=255, null=True, blank=True)
@@ -238,15 +204,12 @@ class Offers(models.Model):
 
     def __str__(self):
         return self.offer_name
-
-
 class SaleOffers(models.Model):
     sale_red_title = models.CharField(max_length=255, null=True, blank=True)
     sale_title = models.CharField(max_length=255, null=True, blank=True)
     sale_sale_words = models.CharField(max_length=255, null=True, blank=True)
     sale_slug = models.CharField(max_length=255, null=True, blank=True)
     sale_image = models.FileField(upload_to="sale_images/", null=True)
-
 class Contact(models.Model):
     email = models.EmailField()
     subject = models.CharField(max_length=255)
