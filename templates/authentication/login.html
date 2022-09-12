@@ -27,13 +27,20 @@
                     <div class="signin-image">
                         <figure><img src="{% static 'authentication/images/signin-image.jpg'%}" alt="sing up image"></figure>
                         <a href="{% url 'signup' %}" class="signup-image-link">Зарегистрироваться</a>
-{% comment %}                         <a href="{% url 'password_reset' %}" class="signup-image-link">Забыли пароль?</a>
- {% endcomment %}                    </div>
+                        <a href="{% url 'reset_password' %}" class="signup-image-link">Забыли пароль?</a>
+                 </div>
 
                     <div class="signin-form">
                         <h2 class="form-title">Вход</h2>
                         <form method="POST" class="register-form" id="login-form">
                             {% csrf_token %}
+                            {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                            {% endfor %}
+                            {% endif %}
                             <div class="form-group">
                                 <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
                                 {{ form.username }}
