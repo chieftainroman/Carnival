@@ -21,8 +21,6 @@ class SignupForm(UserCreationForm):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("Пользователь с таким email уже существует")
         return email
-    
-        
 
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -38,11 +36,3 @@ class SignupForm(UserCreationForm):
         self.fields['password2'].widget.attrs.update({
             'placeholder': 'Повторите пароль'
         })
-
-
-
-
-class ContactForm(forms.Form):
-    from_email = forms.EmailField(required=True)
-    subject = forms.CharField(required=True)
-    message = forms.CharField(widget=forms.Textarea, required=True)
