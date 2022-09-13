@@ -142,22 +142,24 @@ def add_to_cart(request):
 def cart(request):
     user = request.user
     cart_products = Cart.objects.filter(user=user)
-
     # Display Total on Cart Page
     amount = decimal.Decimal(0)
-    shipping_amount = decimal.Decimal(10)
     # using list comprehension to calculate total amount based on quantity and shipping
     cp = [p for p in Cart.objects.all() if p.user==user]
     if cp:
         for p in cp:
-            temp_amount = (p.quantity * p.product.product_price)
-            amount += temp_amount
-
+            if p.product.discount_percent == None or p.product.discount_percent == 0:
+                temp_amount = (p.quantity * p.product.product_price)
+                amount += temp_amount
+            else:
+                temp_amount = round((p.quantity * p.product.product_price - (p.product.product_price * p.product.discount_percent/100)))
+                amount += temp_amount           
+    else:
+        title = "Cart is empty"
     context = {
         'cart_products': cart_products,
         'amount': amount,
-        'shipping_amount': shipping_amount,
-        'total_amount': amount + shipping_amount,
+        'total_amount': amount,
     }
     return render(request, 'cart/index.html', context)
 
@@ -203,3 +205,6 @@ def category_products(request, slug):
 
     }
     return render(request, 'category_products.html', context)
+
+def terms(request):
+    return render(request, "terms/index.html")
