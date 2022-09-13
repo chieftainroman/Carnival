@@ -46,7 +46,7 @@
 														<a href="{% url 'plus-cart' cart_product.id %}" class="inc-btn p-0"><i class="fas fa-plus"></i></a>
 							 						</div>
 							 						<div class="col-md-3 price">
-							 							<span>{{ cart_product.product.product_price}}₽</span>
+														<span>{% call_sellprice cart_product.product.product_price cart_product.product.discount_percent %}₽</span>
 							 						</div>
 							 					</div>
 							 				</div>
