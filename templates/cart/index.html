@@ -1,0 +1,83 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% load product_tags %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Shopping Cart</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'assets/css/style.css'%}">
+</head>
+<body>
+	<main class="page">
+	 	<section class="shopping-cart dark">
+	 		<div class="container">
+		        <div class="content">
+	 				<div class="row">
+	 					<div class="col-md-12 col-lg-8">
+	 						<div class="items">
+								{% if not cart_products %}
+								<h1>Корзина пуста</h1>
+								{% endif %}
+							{% for cart_product in cart_products %}
+				 				<div class="product">
+				 					<div class="row">
+					 					<div class="col-md-3">
+					 						<img class="img-fluid mx-auto d-block image" src="{{ cart_product.product.product_image.url}}">
+					 					</div>
+
+					 					<div class="col-md-8">
+					 						<div class="info">
+						 						<div class="row">
+							 						<div class="col-md-5 product-name">
+							 							<div class="product-name">
+								 							<a href="#">{{ cart_product.product.product_name|truncatewords:3 }}</a>
+									 					</div>
+							 						</div>
+							 						<div class="col-md-4 quantity">
+							 							<label for="quantity">Quantity:</label>
+														<a href="{% url 'minus-cart' cart_product.id %}" class="dec-btn p-0 ml-2"><i class="fas fa-minus"></i></a>
+							 							<input id="quantity" type="number" value ="{{cart_product.quantity}}" class="form-control quantity-input">
+														<a href="{% url 'plus-cart' cart_product.id %}" class="inc-btn p-0"><i class="fas fa-plus"></i></a>
+							 						</div>
+							 						<div class="col-md-3 price">
+														<span>{% call_sellprice cart_product.product.product_price cart_product.product.discount_percent %}₽</span>
+							 						</div>
+							 					</div>
+							 				</div>
+					 					</div>
+					 				</div>
+				 				</div>
+								{% endfor %}
+				 			</div>
+			 			</div>
+						 {% if cart_products %}
+			 			<div class="col-md-12 col-lg-4">
+			 				<div class="summary">
+			 					<h3>Итог</h3>
+{% comment %} 			 					<div class="summary-item"><span class="text">Subtotal</span><span class="price">$360</span></div>
+			 					<div class="summary-item"><span class="text">Discount</span><span class="price">$0</span></div>
+			 					<div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span></div> {% endcomment %}
+			 					<div class="summary-item"><span class="text">В общем:</span><span class="price">{{total_amount}}₽</span></div>
+{% comment %} 			 					<button type="button" id="checkout_button" class="btn btn-primary btn-lg btn-block">Купить</button>
+ {% endcomment %}	
+ <script type="text/javascript" src="https://auth.robokassa.ru/Merchant/PaymentForm/FormSS.js?MerchantLogin=carnivalshopru&InvoiceID=0&Culture=ru&Encoding=utf-8&OutSum=1,00&SignatureValue=10520126Roman"></script>
+			 			</div>
+			 			</div>
+						 {% endif %}
+		 			</div> 
+		 		</div>
+	 		</div>
+		</section>
+	</main>
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% load product_tags %}
+
+{% block content %}
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Table 01</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" href="{% static 'terms/css/style.css' %}">
+
+	</head>
+	<body>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="table-wrap">
+						<table class="table">
+						  <thead class="thead-primary">
+						    <tr>
+						      <th>Реквизит</th>
+						      <th></th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    <tr>
+						      <td>Полное наименование</td>
+						      <td>Индивидуальный предприниматель Мамедов Талех Рамизович</td>
+						    </tr>
+						    <tr>
+						      <td>Сокращенное наименование</td>
+						      <td>ИП Мамедов Т.Р.</td>
+						    </tr>
+						    <tr>
+						      <td>Юридический адрес</td>
+						      <td>359450 , Республика Калмыкия , Октябрьский р-н , Большой Царын п , Пролетарская ул , д 12,  кв 2</td>
+						    </tr>
+						    <tr>
+						      <td>Фактический адрес</td>
+						      <td>141044, Мытищенский р-н , Деревня Грибки , ул , Малый переулок дом 1 .</td>
+						    </tr>
+						    <tr>
+						      <td>ИНН/КПП</td>
+						      <td>370309388617</td>
+						    </tr>
+							<tr>
+								<td>БАНК</td>
+								<td>ФИЛИАЛ «ЦЕНТРАЛЬНЫЙ» БАНКА ВТБ (ПАО) Г. МОСКВА</td>
+							</tr>
+							<tr>
+								<td>Расчетный счет</td>
+								<td>40802810625129000107</td>
+							</tr>
+							<tr>
+								<td>Корр. счет</td>
+								<td>30101810145250000411</td>
+							</tr>
+							<tr>
+								<td>БИК</td>
+								<td>044525411</td>
+							</tr>
+							<tr>
+								<td>ОГРНИП</td>
+								<td>321508100216152</td>
+							</tr>
+							<tr>
+								<td>Конт. тел.:</td>
+								<td>8 (929) 989-29-09</td>
+							</tr>
+							<tr>
+								<td>E-mail:</td>
+								<td>AntiCri3is@yandex.ru
+									Talehgroup@yandex.ru
+									</td>
+							</tr>
+							<tr>
+								<td>Генеральный директор</td>
+								<td>Мамедов Талех Рамизович</td>
+							</tr>
+							<tr>
+								<td>Главный бухгалтер</td>
+								<td>Мамедов Талех Рамизович</td>
+							</tr>
+						  </tbody>
+						</table>
+						<table class="table">
+							<thead class="thead-primary">
+							  <tr>
+								<th>Условия заказа</th>
+								<th></th>
+							  </tr>
+							</thead>
+							<tbody>
+							  <tr>
+								<td>Доставка </td>
+								<td>На следующий день в зависимости от региона</td>
+							  </tr>
+							  <tr>
+								<td>Условия оплаты</td>
+								<td>Предоплата</td>
+							  </tr>
+							  <tr>
+								<td>Возврат</td>
+								<td>Товар возврату не подлежит</td>
+							  </tr>
+							</tbody>
+						  </table>
+						  <table class="table">
+							<thead class="thead-primary">
+							  <tr>
+								<th>#</th>
+								<th>Правила оформления</th>
+								<th></th>
+							  </tr>
+							</thead>
+							<tbody>
+							  <tr>
+								<th scope="row">1</th>
+								<td>ВЫБИРАЙТЕ  ТОВАРЫ</td>
+								<td>Все товары в нашем интернет-магазине сгруппированы по категориям. Выбрав товар, нажмите подробнее, в карточке товара ознакомьтесь с его параметрами, нажмите на кнопку «Добавить в корзину» – товар будет добавлен в Вашу корзину. После окончания процесса покупок переходите к оформлению заказа.</td>
+							  </tr>
+							  <tr>
+								<th scope="row">2</th>
+								<td>ОФОРМЛЯЕТЕ ЗАКАЗ</td>
+								<td>Для просмотра содержимого Вашего заказа нажмите на значок корзины (в верхней правой части страницы).
+
+									Вы увидите товар, который находится  в «Корзине» количество единиц товара может быть увеличено или уменьшено по Вашему желанию - просто измените цифру в строке. Общая стоимость заказа подсчитывается автоматически и отображается внизу вашего списка товаров. После завершения процесса оформления нажмите кнопку «Оформить заказ»</td>
+							  </tr>
+							  <tr>
+								<th scope="row">3</th>
+								<td>КОНТАКТНАЯ ИНФОРМАЦИЯ</td>
+								<td>Пожалуйста, отнеситесь внимательно к заполнению предложенных полей — от этого зависит скорость доставки вашего заказа.
+
+									Укажите фамилию, имя и отчество Контактного лица. Обратите внимание, что предоплаченный заказ вручается лицу, указанному в качестве Контактного лица, при предъявлении документа, удостоверяющего личность.
+									
+									При указании контактного телефона обязательно введите код города или оператора мобильной связи.
+									
+									При введении адреса доставки необходимо указать  полный адрес и индекс </td>
+							  </tr>
+							  <tr>
+								<th scope="row">4</th>
+								<td>ОПЛАТА</td>
+								<td>Выберите и оплатите одним из способов товар.</td>
+							  </tr>
+							</tbody>
+						  </table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+  <script src="{% static 'terms/js/jquery.min.js'%}"></script>
+  <script src="{% static 'terms/js/popper.js'%}"></script>
+  <script src="{% static 'terms/js/bootstrap.min.js'%}"></script>
+  <script src="{% static 'terms/js/main.js'%}"></script>
+
+	</body>
+</html>
+{% endblock %}

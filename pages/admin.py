@@ -1,11 +1,17 @@
 from django.contrib import admin
-from . models import Products, Slider, Offers, SaleOffers, ProductsImage, Category , TeaDetail
+from . models import Products, Slider, Offers, SaleOffers, ProductsImage, Category , TeaDetail, Cart,Order, OrderItem
 
 admin.site.register(Slider)
 admin.site.register(Offers)
 admin.site.register(SaleOffers)
 admin.site.register(Category)
 
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'quantity', 'created_at')
+    list_editable = ('quantity',)
+    list_filter = ('created_at',)
+    list_per_page = 20
+    search_fields = ('user', 'product')
 
 
 class PostImageAdmin(admin.StackedInline):
@@ -42,4 +48,19 @@ class PostAdmin(admin.ModelAdmin):
 class PostImageAdmin(admin.ModelAdmin):
     pass
 
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    raw_id_fields = ['product']
+
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['id', 'full_name', 'user_email',
+                    'address', 'postal_code', 'city', 'paid',
+                    'created', 'updated']
+    list_filter = ['paid', 'created', 'updated']
+    inlines = [OrderItemInline]
+
+admin.site.register(Order, OrderAdmin)
+
+admin.site.register(Cart, CartAdmin)
 

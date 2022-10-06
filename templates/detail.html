@@ -103,10 +103,16 @@
           </div>
 
           <div class="purchase-info">
-            <button type="button" class="btn">
-              Добавить в корзину <i class="fas fa-shopping-cart"></i>
-            </button>
+            <form action="{% url 'add-to-cart' %}">
+              <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+              <button type="submit" class="btn">
+                Добавить в корзину <i class="fas fa-shopping-cart"></i>
+              </button>
+            </form>
           </div>
+          <a href="https://freekassa.ru" target="_blank" rel="noopener noreferrer">
+            <img src="https://cdn.freekassa.ru/banners/big-dark-2.png" title="Прием платежей на сайте для физических лиц и т.д.">
+          </a>
         </div>
       </div>
     </div>

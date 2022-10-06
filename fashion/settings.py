@@ -78,8 +78,8 @@ WSGI_APPLICATION = 'fashion.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'carnival', 
-        'USER': 'roman', 
+        'NAME': 'fashion-website-database', 
+        'USER': 'postgres', 
         'PASSWORD': '10520126Roman',
         'HOST': 'localhost', 
         'PORT': '',
@@ -118,16 +118,14 @@ USE_I18N = True
 
 USE_TZ = True
 
-CONTACT_EMAIL = 'contact@example.com'
-ADMIN_EMAILS = ['romanmammadov872@gmail.com', ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_ACCESS_KEY_ID = 'AKIATZ3374A5YUGW4Q53'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_SES_REGION_NAME = 'us-east-1' #(ex: us-east-2)
+AWS_SES_REGION_ENDPOINT ='email.us-east-1.amazonaws.com' #(ex: email.us-east-2.>
+DEFAULT_FROM_EMAIL = 'carnivalshopru@gmail.com'
 
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
-EMAIL_HOST_PASSWORD = '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'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

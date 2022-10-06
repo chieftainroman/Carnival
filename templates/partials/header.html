@@ -7,12 +7,19 @@
           <a href="{% url "products" %}">Продукты</a>
           <a href="/#featured">Лучшие</a>
           <a href="/#contact">Связаться с нами</a>
+          <a href="{% url "terms" %}">Условия</a>
         </nav>
   
         <div class="icons">
           <div id="menu-btn" class="fas fa-bars"></div>
           <div id="search-btn" class="fas fa-search"></div>
-          <a href="#" class="fas fa-shopping-cart"></a>
+          <a href="{% url "cart" %}" class="fas fa-shopping-cart"></a>
+          {% if not user.is_authenticated %}
+          <a href="{% url "signup" %}" class="fas fa-user"></a>
+          {% endif %}
+          {% if user.is_authenticated %}
+          <a href="{% url "logout" %}" class="fas fa-sign-out"></a>
+          {% endif %}
         </div>
   
         <form method="GET" action="{% url 'search' %}" class="search-form">
