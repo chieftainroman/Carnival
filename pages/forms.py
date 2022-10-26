@@ -3,7 +3,7 @@ from .models import Contact,Order
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm  
 from django.contrib.auth.models import User  
-
+from . models import Order,OrderItem
 class SignupForm(UserCreationForm):  
     email = forms.EmailField(max_length=200, help_text='Required')  
     class Meta:  
@@ -41,4 +41,4 @@ class SignupForm(UserCreationForm):
 class OrderCreateForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['first_name', 'last_name', 'email', 'address', 'postal_code', 'city']
+        fields = ['full_name', 'user_email', 'address', 'postal_code', 'city']

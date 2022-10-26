@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import Products, Slider, Offers, SaleOffers, ProductsImage, Category , TeaDetail, Cart, Order,OrderItem
+from . models import Products, Slider, Offers, SaleOffers, ProductsImage, Category , TeaDetail, Cart,Order, OrderItem
 
 admin.site.register(Slider)
 admin.site.register(Offers)
@@ -55,10 +55,12 @@ class OrderItemInline(admin.TabularInline):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'first_name', 'last_name', 'email',
+    list_display = ['id', 'full_name', 'user_email',
                     'address', 'postal_code', 'city', 'paid',
                     'created', 'updated']
     list_filter = ['paid', 'created', 'updated']
     inlines = [OrderItemInline]
+
+
 
 admin.site.register(Order, OrderAdmin)

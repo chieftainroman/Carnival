@@ -118,13 +118,14 @@ USE_I18N = True
 
 USE_TZ = True
 
-EMAIL_BACKEND = 'django_ses.SESBackend'
 
-EMAIL_HOST = 'email-smtp.eu-west-1.amazonaws.com' 
-EMAIL_USE_TLS = True  
-EMAIL_HOST_USER = 'AKIATZ3374A52FSFRZ6F'  
-EMAIL_HOST_PASSWORD = 'BPdkHo1vx2iqrkO7Rem6f867YBxwYMBSVNyzbyrfpR7E'  
-EMAIL_PORT = 587  
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_ACCESS_KEY_ID = 'AKIATZ3374A5YUGW4Q53'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_SES_REGION_NAME = 'us-east-1' #(ex: us-east-2)
+AWS_SES_REGION_ENDPOINT ='email.us-east-1.amazonaws.com' #(ex: email.us-east-2.>
+DEFAULT_FROM_EMAIL = 'carnivalshopru@gmail.com'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

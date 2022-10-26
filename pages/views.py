@@ -1,3 +1,18 @@
+from .models import OrderItem, Cart
+from django.core.mail import EmailMessage
+from django.contrib.auth.models import User
+from .tokens import account_activation_token
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.sites.shortcuts import get_current_site
+from .forms import SignupForm
+from django.contrib.auth import login, authenticate
+from urllib import parse
+from .forms import OrderCreateForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+import hashlib
 from itertools import product
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
@@ -12,6 +27,7 @@ import decimal
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.mail import send_mail as sm
 from django.db.models import Q  
+
 register = template.Library()
 import hashlib
 from urllib import parse
@@ -29,12 +45,13 @@ from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 
+
 def index(request):
     slider = Slider.objects.all()
     offers = Offers.objects.all()
     saleOffers = SaleOffers.objects.all()
     products = Products.objects.all()
-    data=Products.objects.filter(is_featured=True).order_by('-id')
+    data = Products.objects.filter(is_featured=True).order_by('-id')
     exclusive = Products.objects.filter(is_exclusive=True).order_by('-id')
     categories = Category.objects.all()
     first_topic_categories = Category.objects.filter(first_in_the_topic=True)
@@ -43,36 +60,37 @@ def index(request):
         "offers": offers,
         "saleOffers": saleOffers,
         "products": products,
-        "data":data,
-        "exclusive":exclusive,
-        "categories":categories,
-        "first_topic_categories":first_topic_categories,
+        "data": data,
+        "exclusive": exclusive,
+        "categories": categories,
+        "first_topic_categories": first_topic_categories,
 
     }
 
     return render(request, "index.html", context)
 
-def signup(request): 
+def signup(request):
     if request.user.is_authenticated:
         return redirect("home")
-     
-    if request.method == 'POST':  
-        form = SignupForm(request.POST)  
-        if form.is_valid():  
-            # save form in the memory not in database  
-            user = form.save(commit=False)  
-            user.is_active = False  
-            user.save()  
+
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            # save form in the memory not in database
+            user = form.save(commit=False)
+            user.is_active = True
+            user.save()
             return redirect("login")
-    else:  
-        form = SignupForm()  
-    return render(request, 'authentication/signup.html', {'form': form})  
+    else:
+        form = SignupForm()
+    return render(request, 'authentication/signup.html', {'form': form})
+
 
 def Login(request):
-    if request.method == 'POST':  
+    if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request, username = username, password = password)
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             form = login(request, user)
             messages.success(request, f' welcome {username} !!')
@@ -80,7 +98,9 @@ def Login(request):
         else:
             messages.info(request, f'account done not exit plz sign in')
     form = AuthenticationForm()
-    return render(request, 'authentication/login.html', {'form':form, 'title':'log in'})
+
+    return render(request, 'authentication/login.html', {'form': form, 'title': 'log in'})
+
 
 def logout_view(request):
     logout(request)
@@ -90,15 +110,16 @@ def search(request):
     categories = Category.objects.all()
     search_post = request.GET.get('search')
     if search_post:
-        products = Products.objects.filter (Q(product_name__icontains=search_post) & Q(product_description__icontains=search_post) )
+        products = Products.objects.filter(Q(product_name__icontains=search_post) & Q(
+            product_description__icontains=search_post))
     else:
         # If not searched, return default posts
         products = Products.objects.all()
     context = {
-            "products":products,
-            "categories" : categories,
+        "products": products,
+        "categories": categories,
     }
-    return render(request,"products.html",context)
+    return render(request, "products.html", context)
 
 def products(request):
     products = Products.objects.all()
@@ -106,8 +127,8 @@ def products(request):
     categories = Category.objects.all()
     context = {
         "products": products,
-        "first_topic_categories":first_topic_categories,
-        "categories":categories,
+        "first_topic_categories": first_topic_categories,
+        "categories": categories,
     }
 
     return render(request, "products.html", context)
@@ -141,6 +162,7 @@ def add_to_cart(request):
     
     return redirect('cart')
 
+
 @login_required(login_url="/login/")
 def cart(request):
     user = request.user
@@ -148,15 +170,16 @@ def cart(request):
     # Display Total on Cart Page
     amount = decimal.Decimal(0)
     # using list comprehension to calculate total amount based on quantity and shipping
-    cp = [p for p in Cart.objects.all() if p.user==user]
+    cp = [p for p in Cart.objects.all() if p.user == user]
     if cp:
         for p in cp:
             if p.product.discount_percent == None or p.product.discount_percent == 0:
                 temp_amount = (p.quantity * p.product.product_price)
                 amount += temp_amount
             else:
-                temp_amount = round((p.quantity * p.product.product_price - (p.product.product_price * p.product.discount_percent/100)))
-                amount += temp_amount           
+                temp_amount = round((p.quantity * p.product.product_price -
+                                    (p.product.product_price * p.product.discount_percent/100)))
+                amount += temp_amount
     else:
         title = "Cart is empty"
     context = {
@@ -165,6 +188,7 @@ def cart(request):
         'total_amount': amount,
     }
     return render(request, 'cart/index.html', context)
+
 
 @login_required(login_url="/login/")
 def remove_cart(request, cart_id):
@@ -183,6 +207,7 @@ def plus_cart(request, cart_id):
         cp.save()
     return redirect('cart')
 
+
 @login_required(login_url="/login/")
 def minus_cart(request, cart_id):
     if request.method == 'GET':
@@ -195,6 +220,7 @@ def minus_cart(request, cart_id):
             cp.save()
     return redirect('cart')
 
+
 def category_products(request, slug):
     category = get_object_or_404(Category, slug=slug)
     products = Products.objects.filter(category=category)
@@ -204,7 +230,7 @@ def category_products(request, slug):
         'category': category,
         'products': products,
         'categories': categories,
-        "first_topic_categories":first_topic_categories,
+        "first_topic_categories": first_topic_categories,
 
     }
     return render(request, 'category_products.html', context)
@@ -229,6 +255,9 @@ def order_create(request):
     is_test = ""
     robokassa_payment_url = 'https://auth.robokassa.ru/Merchant/Index.aspx'
     payment_link = ""
+    for p in cart:
+        count += 1
+    
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
         if form.is_valid():
@@ -244,7 +273,6 @@ def order_create(request):
                 else:
                     temp_amount = round((item.quantity * item.product.product_price - (item.product.product_price * item.product.discount_percent/100)))
                     amount += temp_amount  
-                count += 1
                 description.append(item.product.product_name)
         
                 merchant_login = "carnivalshopru"
@@ -314,6 +342,7 @@ def result(request):
         number,
         merchant_password_1
     )
+
     req_sign = data.get("SignatureValue")
 
     if sign != req_sign:
@@ -321,4 +350,4 @@ def result(request):
     else:
         order = Order.objects.get(id=data.get("InvId"))
         order.paid = True
-    
+
