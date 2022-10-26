@@ -1,5 +1,5 @@
 from django import forms
-from .models import Contact
+from .models import Contact,Order
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm  
 from django.contrib.auth.models import User  
@@ -36,3 +36,9 @@ class SignupForm(UserCreationForm):
         self.fields['password2'].widget.attrs.update({
             'placeholder': 'Повторите пароль'
         })
+
+
+class OrderCreateForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['first_name', 'last_name', 'email', 'address', 'postal_code', 'city']

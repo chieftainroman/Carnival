@@ -1,0 +1,98 @@
+{% extends "partials/base.html" %}
+{% load static %}
+{% load product_tags %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="row">
+    <div class="col-75">
+      <div class="container">
+        <form action="{% comment %} {{ payment_link }} {% endcomment %}" method="post">
+            {% csrf_token %}
+          <div class="row">
+            <div class="col-50">
+              <h3>Billing Address</h3>
+              <label for="fname"><i class="fa fa-user"></i> First Name</label>
+              {{ form.first_name }}  
+              <label for="fname"><i class="fa fa-user"></i> Last Name</label>
+              {{ form.last_name }}  
+              <label for="email"><i class="fa fa-envelope"></i> Email</label>
+              {{ form.email }}
+              <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+              {{ form.address }}
+              <label for="city"><i class="fa fa-institution"></i> City</label>
+              {{ form.city }}
+  
+              <div class="row">
+                <div class="col-50">
+                  <label for="zip">Zip</label>
+                  {{ form.postal_code }}
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-90">
+              <h3>Payment</h3>
+              <label for="fname">Accepted Cards</label>
+              <div class="icon-container">
+                <i class="fa fa-cc-visa" style="color:navy;"></i>
+                <i class="fa fa-cc-amex" style="color:blue;"></i>
+                <i class="fa fa-cc-mastercard" style="color:red;"></i>
+                <i class="fa fa-cc-discover" style="color:orange;"></i>
+              </div>
+              <label for="cname">Name on Card</label>
+              <input type="text" id="cname" name="cardname" placeholder="John More Doe">
+              <label for="ccnum">Credit card number</label>
+              <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+              <label for="expmonth">Exp Month</label>
+              <input type="text" id="expmonth" name="expmonth" placeholder="September">
+  
+              <div class="row">
+                <div class="col-50">
+                  <label for="expyear">Exp Year</label>
+                  <input type="text" id="expyear" name="expyear" placeholder="2018">
+                </div>
+                <div class="col-50">
+                  <label for="cvv">CVV</label>
+                  <input type="text" id="cvv" name="cvv" placeholder="352">
+                </div>
+              </div>
+            </div>
+  
+          </div>
+          <label>
+          </label>
+          <input type="submit" value="Continue to checkout" class="btn">
+        </form>
+      </div>
+    </div>
+  
+    <div class="col-25">
+      <div class="container">
+        <h4>Cart
+          <span class="price" style="color:black">
+            <i class="fa fa-shopping-cart"></i>
+            <b>{{ count }}</b>
+          </span>
+        </h4>
+        {% for p in cart %}
+        <p><a href="{% url 'product-detail' p.product.slug %}">{{ p.product.product_name|truncatewords:2 }}</a> <span class="price">{% call_sellprice p.product.product_price p.product.discount_percent %}₽</span></p>
+        {% endfor %}
+        <hr>
+        <p>Total <span class="price" style="color:black"><b>{{ total_amount }}₽</b></span></p>
+      </div>
+    </div>
+  </div>
+<br>
+<br>
+<br>
+<br>
+
+  {% endblock %}

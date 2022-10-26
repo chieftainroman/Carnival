@@ -25,9 +25,9 @@ SECRET_KEY = 'django-insecure-*qc5hb4mye-!2uhnruisq3b)oocnv_(q!a22tfsw=7%ys1+#w*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["3.70.1.42","www.carnival-shop.ru","carnival-shop.ru","www.carnival-shop.info","carnival-shop.info"]
-CSRF_TRUSTED_ORIGINS = ['https://www.carnival-shop.ru','https://*.127.0.0.1','https://www.carnival-shop.info']
-
+#ALLOWED_HOSTS = ["3.70.1.42","www.carnival-shop.ru","carnival-shop.ru","www.carnival-shop.info","carnival-shop.info"]
+#CSRF_TRUSTED_ORIGINS = ['https://www.carnival-shop.ru','https://*.127.0.0.1','https://www.carnival-shop.info']
+ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
@@ -78,8 +78,8 @@ WSGI_APPLICATION = 'fashion.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'carnival', 
-        'USER': 'roman', 
+        'NAME': 'fashion-website-database', 
+        'USER': 'postgres', 
         'PASSWORD': '10520126Roman',
         'HOST': 'localhost', 
         'PORT': '',
@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'ru'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 

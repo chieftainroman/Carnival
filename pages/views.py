@@ -1,7 +1,7 @@
 from itertools import product
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
-from . models import Offers, Slider, Products, SaleOffers, ProductsImage, Category, Cart
+from . models import Offers, Slider, Products, SaleOffers, ProductsImage, Category, Cart, Order,OrderItem
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
@@ -14,8 +14,11 @@ from django.core.mail import send_mail as sm
 from django.db.models import Q  
 register = template.Library()
 import hashlib
+from urllib import parse
+from urllib.parse import urlparse
+from django.dispatch import Signal
 from django.contrib.auth import login, authenticate  
-from .forms import SignupForm  
+from .forms import SignupForm  , OrderCreateForm
 from django.contrib.sites.shortcuts import get_current_site  
 from django.utils.encoding import force_bytes, force_str  
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
@@ -121,7 +124,7 @@ def detail(request, slug):
     }
     return render(request, 'detail.html', context)
 
-@login_required(login_url="https://www.carnival-shop.info/login/")
+@login_required(login_url="/login/")
 def add_to_cart(request):
     user = request.user
     product_id = request.GET.get('prod_id')
@@ -138,7 +141,7 @@ def add_to_cart(request):
     
     return redirect('cart')
 
-@login_required(login_url="https://www.carnival-shop.info/login/")
+@login_required(login_url="/login/")
 def cart(request):
     user = request.user
     cart_products = Cart.objects.filter(user=user)
@@ -163,7 +166,7 @@ def cart(request):
     }
     return render(request, 'cart/index.html', context)
 
-@login_required(login_url="https://www.carnival-shop.info/login/")
+@login_required(login_url="/login/")
 def remove_cart(request, cart_id):
     if request.method == 'GET':
         c = get_object_or_404(Cart, id=cart_id)
@@ -172,7 +175,7 @@ def remove_cart(request, cart_id):
     return redirect('cart')
 
 
-@login_required(login_url="https://www.carnival-shop.info/login/")
+@login_required(login_url="/login/")
 def plus_cart(request, cart_id):
     if request.method == 'GET':
         cp = get_object_or_404(Cart, id=cart_id)
@@ -180,7 +183,7 @@ def plus_cart(request, cart_id):
         cp.save()
     return redirect('cart')
 
-@login_required(login_url="https://www.carnival-shop.info/login/")
+@login_required(login_url="/login/")
 def minus_cart(request, cart_id):
     if request.method == 'GET':
         cp = get_object_or_404(Cart, id=cart_id)
@@ -208,3 +211,114 @@ def category_products(request, slug):
 
 def terms(request):
     return render(request, "terms/index.html")
+
+def calculate_signature(*args) -> str:
+
+    return hashlib.md5(':'.join(str(arg) for arg in args).encode()).hexdigest()
+
+def order_create(request):
+    cart = Cart.objects.filter(user=request.user)
+    amount = decimal.Decimal(0)
+    count = 0
+    description = []
+        
+    merchant_login = ""
+    merchant_password_1 = "" 
+    cost =  ""
+    number = ""
+    is_test = ""
+    robokassa_payment_url = 'https://auth.robokassa.ru/Merchant/Index.aspx'
+    payment_link = ""
+    if request.method == 'POST':
+        form = OrderCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save()
+            for item in cart:
+                OrderItem.objects.create(order=order,
+                                         product=item.product,
+                                         price=item.product.product_price * item.quantity,
+                                         quantity=item.quantity)
+                if item.product.discount_percent == None or item.product.discount_percent == 0:
+                    temp_amount = (item.quantity * item.product.product_price)
+                    amount += temp_amount
+                else:
+                    temp_amount = round((item.quantity * item.product.product_price - (item.product.product_price * item.product.discount_percent/100)))
+                    amount += temp_amount  
+                count += 1
+                description.append(item.product.product_name)
+        
+                merchant_login = "carnivalshopru"
+                merchant_password_1 = "10520126Roman"   
+                cost = str(amount)
+                number = str(order.id)
+                is_test = str(1)
+            
+            signature = calculate_signature(
+                merchant_login,
+                cost,
+                number,
+                merchant_password_1
+            )
+            
+            data = {
+                'MerchantLogin': merchant_login,
+                'OutSum': cost,
+                'InvId': number,
+                'Description': description,
+                'SignatureValue': signature,
+                'IsTest': is_test
+            }
+            
+            payment_link = f'{robokassa_payment_url}?{parse.urlencode(data)}'
+            cart.delete()
+            return redirect(payment_link)
+            return render(request, 'checkout/checkout.html',
+                          {'order': order,'cart':cart,'total_amount':amount,'count':count,'payment_link':payment_link})
+    else:
+        form = OrderCreateForm()        
+    return render(request, 'checkout/checkout.html',
+                  {'cart': cart, 'form': form,'total_amount':amount,'count':count,'payment_link':payment_link},)
+
+def result(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+
+    if ip not in ['185.59.216.0/24 ', '185.59.216.1', '185.59.216.25',]:
+        return HttpResponse("unknown sender")
+    
+    cart = Cart.objects.filter(user=request.user)
+    amount = decimal.Decimal(0)
+    count = 0
+    description = []
+    for p in cart:
+        if p.product.discount_percent == None or p.product.discount_percent == 0:
+            temp_amount = (p.quantity * p.product.product_price)
+            amount += temp_amount
+        else:
+            temp_amount = round((p.quantity * p.product.product_price - (p.product.product_price * p.product.discount_percent/100)))
+            amount += temp_amount  
+        count += 1
+        description.append(p.product.product_name)
+        
+    data = request.POST
+    merchant_login = "carnivalshopru"
+    merchant_password_1 = "10520126Roman" 
+    cost = str(amount)
+    number = str(12)
+    sign = calculate_signature(
+        merchant_login,
+        cost,
+        number,
+        merchant_password_1
+    )
+    req_sign = data.get("SignatureValue")
+
+    if sign != req_sign:
+        return HttpResponse('wrong sign')
+    else:
+        order = Order.objects.get(id=data.get("InvId"))
+        order.paid = True
+    
