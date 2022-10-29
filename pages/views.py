@@ -236,7 +236,7 @@ def category_products(request, slug):
     return render(request, 'category_products.html', context)
 
 def terms(request):
-    return redirect(request, "terms/index.html")
+    return render(request, "terms/index.html")
 
 def calculate_signature(*args) -> str:
 
