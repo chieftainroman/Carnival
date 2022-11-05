@@ -1,3 +1,6 @@
+from .forms import SignupForm, OrderCreateForm
+from django.dispatch import Signal
+from urllib.parse import urlparse
 from .models import OrderItem, Cart
 from django.core.mail import EmailMessage
 from django.contrib.auth.models import User
@@ -16,7 +19,7 @@ import hashlib
 from itertools import product
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
-from . models import Offers, Slider, Products, SaleOffers, ProductsImage, Category, Cart, Order,OrderItem
+from . models import Offers, Slider, Products, SaleOffers, ProductsImage, Category, Cart, Order, OrderItem
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
@@ -26,24 +29,9 @@ from django.contrib import messages
 import decimal
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.mail import send_mail as sm
-from django.db.models import Q  
+from django.db.models import Q
 
 register = template.Library()
-import hashlib
-from urllib import parse
-from urllib.parse import urlparse
-from django.dispatch import Signal
-from django.contrib.auth import login, authenticate  
-from .forms import SignupForm  , OrderCreateForm
-from django.contrib.sites.shortcuts import get_current_site  
-from django.utils.encoding import force_bytes, force_str  
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
-from django.template.loader import render_to_string  
-from .tokens import account_activation_token  
-from django.contrib.auth.models import User  
-from django.core.mail import EmailMessage  
-from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -68,6 +56,7 @@ def index(request):
     }
 
     return render(request, "index.html", context)
+
 
 def signup(request):
     if request.user.is_authenticated:
@@ -106,6 +95,7 @@ def logout_view(request):
     logout(request)
     return redirect("home")
 
+
 def search(request):
     categories = Category.objects.all()
     search_post = request.GET.get('search')
@@ -121,6 +111,7 @@ def search(request):
     }
     return render(request, "products.html", context)
 
+
 def products(request):
     products = Products.objects.all()
     first_topic_categories = Category.objects.filter(first_in_the_topic=True)
@@ -133,6 +124,7 @@ def products(request):
 
     return render(request, "products.html", context)
 
+
 def detail(request, slug):
     product = get_object_or_404(Products, slug=slug)
     photos = ProductsImage.objects.filter(post=product)
@@ -144,6 +136,7 @@ def detail(request, slug):
 
     }
     return render(request, 'detail.html', context)
+
 
 @login_required(login_url="/login/")
 def add_to_cart(request):
@@ -159,7 +152,7 @@ def add_to_cart(request):
         cp.save()
     else:
         Cart(user=user, product=product).save()
-    
+
     return redirect('cart')
 
 
@@ -235,29 +228,32 @@ def category_products(request, slug):
     }
     return render(request, 'category_products.html', context)
 
+
 def terms(request):
     return render(request, "terms/index.html")
+
 
 def calculate_signature(*args) -> str:
 
     return hashlib.md5(':'.join(str(arg) for arg in args).encode()).hexdigest()
+
 
 def order_create(request):
     cart = Cart.objects.filter(user=request.user)
     amount = decimal.Decimal(0)
     count = 0
     description = []
-        
+
     merchant_login = ""
-    merchant_password_1 = "" 
-    cost =  ""
+    merchant_password_1 = ""
+    cost = ""
     number = ""
     is_test = ""
     robokassa_payment_url = 'https://auth.robokassa.ru/Merchant/Index.aspx'
     payment_link = ""
     for p in cart:
         count += 1
-    
+
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
         if form.is_valid():
@@ -271,23 +267,24 @@ def order_create(request):
                     temp_amount = (item.quantity * item.product.product_price)
                     amount += temp_amount
                 else:
-                    temp_amount = round((item.quantity * item.product.product_price - (item.product.product_price * item.product.discount_percent/100)))
-                    amount += temp_amount  
+                    temp_amount = round((item.quantity * item.product.product_price - (
+                        item.product.product_price * item.product.discount_percent/100)))
+                    amount += temp_amount
                 description.append(item.product.product_name)
-        
+
                 merchant_login = "carnivalshopru"
-                merchant_password_1 = "10520126Roman"   
+                merchant_password_1 = "10520126Roman"
                 cost = str(amount)
                 number = str(order.id)
                 is_test = str(0)
-            
+
             signature = calculate_signature(
                 merchant_login,
                 cost,
                 number,
                 merchant_password_1
             )
-            
+
             data = {
                 'MerchantLogin': merchant_login,
                 'OutSum': cost,
@@ -296,16 +293,17 @@ def order_create(request):
                 'SignatureValue': signature,
                 'IsTest': is_test
             }
-            
+
             payment_link = f'{robokassa_payment_url}?{parse.urlencode(data)}'
             cart.delete()
             return redirect(payment_link)
             return render(request, 'checkout/checkout.html',
-                          {'order': order,'cart':cart,'total_amount':amount,'count':count,'payment_link':payment_link})
+                          {'order': order, 'cart': cart, 'total_amount': amount, 'count': count, 'payment_link': payment_link})
     else:
-        form = OrderCreateForm()        
+        form = OrderCreateForm()
     return render(request, 'checkout/checkout.html',
-                  {'cart': cart, 'form': form,'total_amount':amount,'count':count,'payment_link':payment_link},)
+                  {'cart': cart, 'form': form, 'total_amount': amount, 'count': count, 'payment_link': payment_link},)
+
 
 def result(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -314,9 +312,9 @@ def result(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
 
-    if ip not in ['185.59.216.0/24 ', '185.59.216.1', '185.59.216.25',]:
+    if ip not in ['185.59.216.0/24 ', '185.59.216.1', '185.59.216.25', ]:
         return HttpResponse("unknown sender")
-    
+
     cart = Cart.objects.filter(user=request.user)
     amount = decimal.Decimal(0)
     count = 0
@@ -326,14 +324,15 @@ def result(request):
             temp_amount = (p.quantity * p.product.product_price)
             amount += temp_amount
         else:
-            temp_amount = round((p.quantity * p.product.product_price - (p.product.product_price * p.product.discount_percent/100)))
-            amount += temp_amount  
+            temp_amount = round((p.quantity * p.product.product_price -
+                                (p.product.product_price * p.product.discount_percent/100)))
+            amount += temp_amount
         count += 1
         description.append(p.product.product_name)
-        
+
     data = request.POST
     merchant_login = "carnivalshopru"
-    merchant_password_1 = "10520126Roman" 
+    merchant_password_1 = "10520126Roman"
     cost = str(amount)
     number = str(12)
     sign = calculate_signature(
@@ -350,4 +349,3 @@ def result(request):
     else:
         order = Order.objects.get(id=data.get("InvId"))
         order.paid = True
-
