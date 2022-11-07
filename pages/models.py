@@ -19,7 +19,10 @@ class Category(models.Model):
     first_in_the_topic = models.BooleanField(null=True,blank= True)
     def __str__(self):
         return self.title
-    
+    class Meta:
+        verbose_name = 'Категории'
+        verbose_name_plural = 'Категории'
+        
     def save(self, *args, **kwargs):
         title = self.title
         self.slug = self.generate_slug()
@@ -137,7 +140,10 @@ class Products(models.Model):
     producting_technology = models.CharField(max_length=255,null=True,blank=True,verbose_name="Технология производства")
     def __str__(self):
         return self.product_name
-    
+    class Meta:
+        verbose_name = 'Продукты'
+        verbose_name_plural = 'Продукты'
+        
     def save(self, *args, **kwargs):
         product_name = self.product_name
         # allow_unicode=True for support utf-8 languages
@@ -168,8 +174,9 @@ class Cart(models.Model):
 
     def __str__(self):
         return str(self.user)
-    
-    # Creating Model Property to calculate Quantity x Price
+    class Meta:
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзина'
     @property
     def total_price(self):
         return self.quantity * self.product.price
@@ -193,6 +200,9 @@ class Slider(models.Model):
     slider_image = models.FileField(
         upload_to="slider_images/", null=True, blank=True)
     slider_slug = models.CharField(max_length=255, null=True, blank=True)
+    class Meta:
+        verbose_name = 'Слайдер'
+        verbose_name_plural = 'Слайдер'
 
     def __str__(self):
         return self.slider_name
@@ -204,12 +214,20 @@ class Offers(models.Model):
 
     def __str__(self):
         return self.offer_name
+    
+    class Meta:
+        verbose_name = 'Предложения'
+        verbose_name_plural = 'Предложения'
 class SaleOffers(models.Model):
     sale_red_title = models.CharField(max_length=255, null=True, blank=True)
     sale_title = models.CharField(max_length=255, null=True, blank=True)
     sale_sale_words = models.CharField(max_length=255, null=True, blank=True)
     sale_slug = models.CharField(max_length=255, null=True, blank=True)
     sale_image = models.FileField(upload_to="sale_images/", null=True)
+    
+    class Meta:
+        verbose_name = 'Предложения по скидке'
+        verbose_name_plural = 'Предложения по скидке'
 
 class Contact(models.Model):
     email = models.EmailField()
