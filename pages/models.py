@@ -190,7 +190,10 @@ class ProductsImage(models.Model):
     post = models.ForeignKey(Products, default=None, on_delete=models.CASCADE)
     images = models.FileField(upload_to='product_images/',verbose_name='Дополнительные снимки продукта')
     place = models.IntegerField(null=True,verbose_name='Какая фотка по очереди?')
-
+    class Meta:
+        verbose_name = 'Фото продуктов'
+        verbose_name_plural = 'Фото продуктов'
+        
     def __str__(self):
         return self.post.product_name
 class Slider(models.Model):
