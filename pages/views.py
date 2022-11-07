@@ -252,6 +252,14 @@ def order_create(request):
     robokassa_payment_url = 'https://auth.robokassa.ru/Merchant/Index.aspx'
     payment_link = ""
     for p in cart:
+        if p.product.discount_percent == None or p.product.discount_percent == 0:
+            temp_amount = (p.quantity * p.product.product_price)
+            amount += temp_amount
+        else:
+            temp_amount = round((p.quantity * p.product.product_price - (
+            p.product.product_price * p.product.discount_percent/100)))
+            amount += temp_amount
+        description.append(p.product.product_name)
         count += 1
 
     if request.method == 'POST':
@@ -263,15 +271,6 @@ def order_create(request):
                                          product=item.product,
                                          price=item.product.product_price * item.quantity,
                                          quantity=item.quantity)
-                if item.product.discount_percent == None or item.product.discount_percent == 0:
-                    temp_amount = (item.quantity * item.product.product_price)
-                    amount += temp_amount
-                else:
-                    temp_amount = round((item.quantity * item.product.product_price - (
-                        item.product.product_price * item.product.discount_percent/100)))
-                    amount += temp_amount
-                description.append(item.product.product_name)
-
                 merchant_login = "carnivalshopru"
                 merchant_password_1 = "10520126Roman"
                 cost = str(amount)
