@@ -84,7 +84,7 @@
         <p><a href="{% url 'product-detail' p.product.slug %}">{{ p.product.product_name|truncatewords:2 }}</a> <span class="price">{% call_sellprice p.product.product_price p.product.discount_percent %}₽</span></p>
         {% endfor %}
         <hr>
-        <p>В целом <span class="price" style="color:black"><b>{{ total_amount }}₽</b></span></p>
+        <p>В общем <span class="price" style="color:black"><b>{{ total_amount }}₽</b></span></p>
       </div>
     </div>
   </div>
