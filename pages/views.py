@@ -277,13 +277,13 @@ def order_create(request):
                 cost = str(amount)
                 number = str(order.id)
                 is_test = str(1)
-                signature = calculate_signature(
-                    merchant_login,
-                    cost,
-                    number,
-                    merchant_password_1
-                )
 
+            signature = calculate_signature(
+                merchant_login,
+                cost,
+                number,
+                merchant_password_1
+            )
 
             data = {
                 'MerchantLogin': merchant_login,
