@@ -275,7 +275,7 @@ def order_create(request):
                 merchant_login = "carnivalshopru"
                 merchant_password_1 = "10520126Roman"
                 cost = str(amount)
-                number = str(order.id)
+                number = str(13)
                 is_test = str(1)
 
             signature = calculate_signature(
@@ -295,6 +295,7 @@ def order_create(request):
             }
 
             payment_link = f'{robokassa_payment_url}?{parse.urlencode(data)}'
+            print(payment_link)
             cart.delete()
             return redirect(payment_link)
             return render(request, 'checkout/checkout.html',
