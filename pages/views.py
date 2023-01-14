@@ -257,7 +257,7 @@ def order_create(request):
             amount += temp_amount
         else:
             temp_amount = round((p.quantity * p.product.product_price - (
-            p.product.product_price * p.product.discount_percent/100)))
+                p.product.product_price * p.product.discount_percent/100)))
             amount += temp_amount
         description.append(p.product.product_name)
         count += 1
@@ -275,7 +275,8 @@ def order_create(request):
                 merchant_password_1 = "10520126Roman"
                 cost = str(amount)
                 number = str(order.id)
-                is_test = str(0)
+                
+                is_test = str(1)
 
             signature = calculate_signature(
                 merchant_login,
