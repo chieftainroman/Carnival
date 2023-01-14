@@ -251,6 +251,7 @@ def order_create(request):
     is_test = ""
     robokassa_payment_url = 'https://auth.robokassa.ru/Merchant/Index.aspx'
     payment_link = ""
+    signature = None
     for p in cart:
         if p.product.discount_percent == None or p.product.discount_percent == 0:
             temp_amount = (p.quantity * p.product.product_price)
@@ -276,13 +277,13 @@ def order_create(request):
                 cost = str(amount)
                 number = str(order.id)
                 is_test = str(1)
+                signature = calculate_signature(
+                    merchant_login,
+                    cost,
+                    number,
+                    merchant_password_1
+                )
 
-            signature = calculate_signature(
-                merchant_login,
-                cost,
-                number,
-                merchant_password_1
-            )
 
             data = {
                 'MerchantLogin': merchant_login,
