@@ -290,7 +290,7 @@ def order_create(request):
                 'InvId': number,
                 'Description': description,
                 'SignatureValue': signature,
-                'IsTest': "1"
+                'IsTest': True
             }
 
             payment_link = f'{robokassa_payment_url}?{parse.urlencode(data)}'
