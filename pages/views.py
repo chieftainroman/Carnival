@@ -251,7 +251,6 @@ def order_create(request):
     is_test = ""
     robokassa_payment_url = 'https://auth.robokassa.ru/Merchant/Index.aspx'
     payment_link = ""
-    signature = None
     for p in cart:
         if p.product.discount_percent == None or p.product.discount_percent == 0:
             temp_amount = (p.quantity * p.product.product_price)
@@ -275,7 +274,7 @@ def order_create(request):
                 merchant_login = "carnivalshopru"
                 merchant_password_1 = "10520126Roman"
                 cost = str(amount)
-                number = str(13)
+                number = str(order.id)
                 is_test = str(1)
 
             signature = calculate_signature(
@@ -335,7 +334,7 @@ def result(request):
     merchant_login = "carnivalshopru"
     merchant_password_1 = "10520126Roman"
     cost = str(amount)
-    number = str(12)
+    number = data.get("InvId")
     sign = calculate_signature(
         merchant_login,
         cost,
