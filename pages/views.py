@@ -274,8 +274,8 @@ def order_create(request):
                 merchant_login = "carnivalshopru"
                 merchant_password_1 = "10520126Roman"
                 cost = str(amount)
-                number = "13"
-                is_test = str(0)
+                number = str(13)
+                is_test = str(1)
 
             signature = calculate_signature(
                 merchant_login,
