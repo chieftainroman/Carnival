@@ -248,7 +248,7 @@ def order_create(request):
     merchant_password_1 = ""
     cost = ""
     number = ""
-    is_test = "1"
+    is_test = ""
     robokassa_payment_url = 'https://auth.robokassa.ru/Merchant/Index.aspx'
     payment_link = ""
     for p in cart:
@@ -275,7 +275,7 @@ def order_create(request):
                 merchant_password_1 = "10520126Roman"
                 cost = str(amount)
                 number = str(order.id)
-                
+                is_test = str(1)
 
             signature = calculate_signature(
                 merchant_login,
@@ -290,7 +290,7 @@ def order_create(request):
                 'InvId': number,
                 'Description': description,
                 'SignatureValue': signature,
-                'IsTest': True
+                'IsTest': is_test
             }
 
             payment_link = f'{robokassa_payment_url}?{parse.urlencode(data)}'
