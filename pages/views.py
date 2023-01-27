@@ -295,11 +295,11 @@ def order_create(request):
             cart.delete()
             return redirect(payment_link)
             return render(request, 'checkout/checkout.html',
-                          {'order': order, 'cart': cart, 'total_amount': amount, 'count': count, 'payment_link': payment_link})
+                          {'order': order, 'cart': cart, 'total_amount': amount, 'count': count,})
     else:
         form = OrderCreateForm()
     return render(request, 'checkout/checkout.html',
-                  {'cart': cart, 'form': form, 'total_amount': amount, 'count': count, 'payment_link': payment_link},)
+                  {'cart': cart, 'form': form, 'total_amount': amount, 'count': count},)
 
 
 def result(request):
