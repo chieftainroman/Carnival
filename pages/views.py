@@ -33,6 +33,13 @@ from django.db.models import Q
 
 register = template.Library()
 
+merchant_login = "carnivalshopru"
+merchant_password_1 = "10520126Roman"
+cost = ""
+number = ""
+is_test = ""
+robokassa_payment_url = 'https://auth.robokassa.ru/Merchant/Index.aspx'
+payment_link = ""
 
 def index(request):
     slider = Slider.objects.all()
@@ -244,13 +251,6 @@ def order_create(request):
     count = 0
     description = []
 
-    merchant_login = ""
-    merchant_password_1 = ""
-    cost = ""
-    number = ""
-    is_test = ""
-    robokassa_payment_url = 'https://auth.robokassa.ru/Merchant/Index.aspx'
-    payment_link = ""
     for p in cart:
         if p.product.discount_percent == None or p.product.discount_percent == 0:
             temp_amount = (p.quantity * p.product.product_price)
@@ -271,10 +271,8 @@ def order_create(request):
                                          product=item.product,
                                          price=item.product.product_price * item.quantity,
                                          quantity=item.quantity)
-                merchant_login = "carnivalshopru"
-                merchant_password_1 = "10520126Roman"
                 cost = str(amount)
-                number = str(13)
+                number = str(order.id)
                 is_test = str(1)
 
             signature = calculate_signature(
@@ -315,26 +313,8 @@ def result(request):
     if ip not in ['185.59.216.0/24 ', '185.59.216.1', '185.59.216.25', ]:
         return HttpResponse("unknown sender")
 
-    cart = Cart.objects.filter(user=request.user)
-    amount = decimal.Decimal(0)
-    count = 0
-    description = []
-    for p in cart:
-        if p.product.discount_percent == None or p.product.discount_percent == 0:
-            temp_amount = (p.quantity * p.product.product_price)
-            amount += temp_amount
-        else:
-            temp_amount = round((p.quantity * p.product.product_price -
-                                (p.product.product_price * p.product.discount_percent/100)))
-            amount += temp_amount
-        count += 1
-        description.append(p.product.product_name)
-
     data = request.POST
-    merchant_login = "carnivalshopru"
-    merchant_password_1 = "10520126Roman"
-    cost = str(amount)
-    number = data.get("InvId")
+    
     sign = calculate_signature(
         merchant_login,
         cost,
