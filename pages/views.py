@@ -39,7 +39,6 @@ cost = ""
 number = ""
 is_test = ""
 robokassa_payment_url = 'https://auth.robokassa.ru/Merchant/Index.aspx'
-payment_link = ""
 
 def index(request):
     slider = Slider.objects.all()
