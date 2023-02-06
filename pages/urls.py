@@ -25,7 +25,8 @@ urlpatterns = [
     path("reset_password_complete/", auth_views.PasswordResetCompleteView.as_view(),name="password_reset_complete"), 
 
     path("checkout/", views.order_create, name="checkout"),
-    
+    path("payment/result", views.result, name="result"),
+
 
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
