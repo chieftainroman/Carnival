@@ -272,7 +272,7 @@ def order_create(request):
                                          quantity=item.quantity)
                 cost = str(amount)
                 number = str(order.id)
-                is_test = str(1)
+                is_test = str(0)
 
             signature = calculate_signature(
                 merchant_login,
@@ -325,6 +325,7 @@ def result(request):
 
     if sign != req_sign:
         return HttpResponse('wrong sign')
-    else:
-        order = Order.objects.get(id=data.get("InvId"))
-        order.paid = True
+    
+    order = Order.objects.get(id=data.get("InvId"))
+    order.paid = True
+        
