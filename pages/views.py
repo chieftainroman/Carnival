@@ -272,7 +272,7 @@ def order_create(request):
                                          quantity=item.quantity)
                 cost = str(amount)
                 number = str(order.id)
-                is_test = str(0)
+                is_test = str(1)
 
             signature = calculate_signature(
                 merchant_login,
@@ -280,7 +280,12 @@ def order_create(request):
                 number,
                 merchant_password_1
             )
+            print(merchant_login)
+            print(cost)
+            print(number)
+            print(merchant_password_1)
 
+            
             data = {
                 'MerchantLogin': merchant_login,
                 'OutSum': cost,
