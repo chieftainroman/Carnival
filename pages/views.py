@@ -277,7 +277,6 @@ def order_create(request):
             signature = calculate_signature(
                 merchant_login,
                 cost,
-                number,
                 merchant_password_1
             )
             print(merchant_login)
