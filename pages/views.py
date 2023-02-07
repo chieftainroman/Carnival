@@ -30,7 +30,7 @@ import decimal
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.mail import send_mail as sm
 from django.db.models import Q
-
+from .utils import hash_md5
 register = template.Library()
 
 merchant_login = "carnivalshopru"
@@ -239,11 +239,6 @@ def terms(request):
     return render(request, "terms/index.html")
 
 
-def calculate_signature(*args) -> str:
-
-    return hashlib.md5(':'.join(str(arg) for arg in args).encode()).hexdigest()
-
-
 def order_create(request):
     cart = Cart.objects.filter(user=request.user)
     amount = decimal.Decimal(0)
@@ -274,12 +269,16 @@ def order_create(request):
                 number = str(order.id)
                 is_test = str(1)
 
-            signature = calculate_signature(
+'''             signature = calculate_signature(
                 merchant_login,
                 cost,
                 number,
                 merchant_password_1,
-            )
+            ) 
+            '''
+            
+            signature = hash_md5(f'{merchant_login}:{cost}:{number}:{merchant_password_1}')
+            
             print(merchant_login)
             print(cost)
             print(number)
