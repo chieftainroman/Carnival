@@ -268,14 +268,6 @@ def order_create(request):
                 cost = str(amount)
                 number = str(order.id)
                 is_test = str(1)
-
-'''             signature = calculate_signature(
-                merchant_login,
-                cost,
-                number,
-                merchant_password_1,
-            ) 
-            '''
             
             signature = hash_md5(f'{merchant_login}:{cost}:{number}:{merchant_password_1}')
             
