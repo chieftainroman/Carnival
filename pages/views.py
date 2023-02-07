@@ -34,7 +34,7 @@ from django.db.models import Q
 register = template.Library()
 
 merchant_login = "carnivalshopru"
-merchant_password_1 = "Hrq5sQjXyaJy30L6A1qK"  #"bqBKbymHM614F4UD1dER"
+merchant_password_1 = "10520126Roman"  #"bqBKbymHM614F4UD1dER"
 cost = ""
 number = ""
 is_test = ""
@@ -277,7 +277,8 @@ def order_create(request):
             signature = calculate_signature(
                 merchant_login,
                 cost,
-                merchant_password_1
+                number,
+                merchant_password_1,
             )
             print(merchant_login)
             print(cost)
