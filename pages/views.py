@@ -34,7 +34,7 @@ from django.db.models import Q
 register = template.Library()
 
 merchant_login = "carnivalshopru"
-merchant_password_1 = "10520126Roman"  #"m2WKRQuXpnX210WgQru8"
+merchant_password_1 = "Hrq5sQjXyaJy30L6A1qK"  #"bqBKbymHM614F4UD1dER"
 cost = ""
 number = ""
 is_test = ""
