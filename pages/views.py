@@ -322,6 +322,7 @@ def result(request):
     sign = calculate_signature(
         merchant_login,
         cost,
+        number,
         merchant_password_1
     )
 
