@@ -267,16 +267,10 @@ def order_create(request):
                                          quantity=item.quantity)
                 cost = str(amount)
                 number = str(order.id)
-                is_test = str(0)
+                is_test = str(1)
             
             signature = hash_md5(f'{merchant_login}:{cost}:{number}:{merchant_password_1}')
-            
-            print(merchant_login)
-            print(cost)
-            print(number)
-            print(merchant_password_1)
-
-            
+              
             data = {
                 'MerchantLogin': merchant_login,
                 'OutSum': cost,
@@ -310,12 +304,7 @@ def result(request):
 
     data = request.POST
     
-    sign = calculate_signature(
-        merchant_login,
-        cost,
-        number,
-        merchant_password_1
-    )
+    sign = hash_md5(f'{merchant_login}:{cost}:{number}:{merchant_password_1}')
 
     req_sign = data.get("SignatureValue")
 
