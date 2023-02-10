@@ -34,7 +34,7 @@ from .utils import hash_md5
 register = template.Library()
 
 merchant_login = "carnivalshopru"
-merchant_password_1 = "10520126Roman"  #"bqBKbymHM614F4UD1dER"
+merchant_password_1 = "e2YT7Z0LpvL3Q9hZjpTV"  #"bqBKbymHM614F4UD1dER"
 cost = ""
 number = ""
 is_test = ""
@@ -267,7 +267,7 @@ def order_create(request):
                                          quantity=item.quantity)
                 cost = str(amount)
                 number = str(order.id)
-                is_test = str(1)
+                is_test = str(0)
             
             signature = hash_md5(f'{merchant_login}:{cost}:{number}:{merchant_password_1}')
             
