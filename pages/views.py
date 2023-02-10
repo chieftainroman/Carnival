@@ -34,8 +34,7 @@ from .utils import hash_md5
 register = template.Library()
 
 merchant_login = "carnivalshopru"
-merchant_password_1 = "e2YT7Z0LpvL3Q9hZjpTV"  
-test_merchant_password_1 = "10520126Roman"
+merchant_password_1 = "e2YT7Z0LpvL3Q9hZjpTV"  #"bqBKbymHM614F4UD1dER"
 cost = ""
 number = ""
 is_test = ""
